@@ -64,6 +64,27 @@
 %modify this
 \lecture{9}{Machine Learning and Modern Visual Recognition Techniques}{}
 
+
+\section{Introduction}
+This lecture provides an introduction to Neural Networks and proceeds to discuss Convolutional Neural Networks which are especially suited to process images. With the advance of technology the amount of data available for any given task has gone up exponentially  in the last several decades. Methods such as logistic regression perform well when the training data set is large. But their performance plateaus out after a point. Neural networks have gained popularity because with huge amounts of data which is currently available, even small Neural Networks are able to outperform traditional learning algorithms by large margins. 
+
+Image recognition and image processing has widespread applications in robotics such as  path identification, obstacle avoidance etc. If we were to use a standard Neural Network architecture to process images, we would need to learn parameters of the order of millions. Convolutional Neural Networks have significantly brought down this number by using special convolution layers which exploits the spatial structure of images. 
+
+The core learning objectives of this lecture are:
+\begin{enumerate}
+     \item The basics of Neural Networks :
+     \begin{itemize}
+         \item How Neural Networks mimic the architecture of human brain and how multiple layers of the network work together
+         \item How to train a Neural network to do a particular task and where they could go wrong
+     \end{itemize}
+     \item Convolutional Neural Networks:
+     \begin{itemize}
+         \item This section covers in depth the different elements of a Convolutional Neural Network and some famous architectures commonly used in the industry 
+     \end{itemize}
+ \end{enumerate}
+ 
+
+
 \section{Neural Network Basics}
 Work on Artificial Neural Networks, generally known as just 'Neural Networks', has been inspired by the fact that the human brain processes information in a completely different way than computers. Due to this, human brains are much more efficient at certain tasks, such as vision, language processing, etc. than computers. Artificial neural networks aim to mimic this biological model by employing a large number of simple interconnected processing units or 'neurons'.  We may thus offer the following definition of a neural network viewed as an adaptive machine\cite{haykin}:
 
@@ -339,6 +360,16 @@ Empowered with impressive ability of feature extraction and optimization, deep c
 \end{itemize}
 
 There also exist more model architectures proposed for specific tasks, such as YOLO\cite{yolo} and Faster R-CNN\cite{faster_rcnn} in the field of object detection and localization.
+
+\section{Additional Resources}
+\begin{enumerate}
+    \item CS231n (CNNs for Visual Recognition) class notes : http://cs231n.github.io/convolutional-networks/
+    \item Live Demo - Inner Workings of a CNN : http://scs.ryerson.ca/~aharley/vis/conv/
+ 2D version : http://scs.ryerson.ca/~aharley/vis/conv/flat.html
+\item CS230 : https://cs230-stanford.github.io/
+\item Tensorflow documentation : https://www.tensorflow.org/api_docs/python/tf
+\end{enumerate}
+
 
 % References
 \bibliographystyle{unsrt}
