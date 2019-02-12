@@ -417,6 +417,75 @@ When multiple models are ensembled together, ResNet achieves a top-5 classificat
 
 There also exist more model architectures proposed for specific tasks, such as YOLO\cite{yolo} and Faster R-CNN\cite{faster_rcnn} in the field of object detection and localization.
 
+\section{Object Detection Algorithms}
+\subsection{R-CNN\cite{DBLP:journals/corr/GirshickDDM13}}
+The goal of R-CNN is to take in an image, and correctly identify where the main objects (via a bounding box) in the image. The network input is image and the outputs are bounding boxes + labels for each object in the image.
+In summary, R-CNN is follows the steps below:
+\begin{enumerate}
+    \item Generate a set of proposals for bounding boxes.
+    \item Run the images in the bounding boxes through a pre-trained AlexNet and finally an SVM to see what object the image in the box is.
+    \item Run the box through a linear regression model to output tighter coordinates for the box once the object has been classified.
+\end{enumerate}
+\begin{figure}[!htb]
+\centering
+\includegraphics[height=2.5in]{pics/rcnn_intro.png}
+\caption{R-CNN Algorithm}
+\label{fig:rcnn1}
+\end{figure}
+\begin{figure}[!htb]
+\centering
+\includegraphics[height=2.5in]{pics/rcnn_intro2.png}
+\caption{R-CNN Algorithm}
+\label{fig:rcnn2}
+\end{figure}
+In terms of the bounding boxes selection, Ross Girshick et al. proposed a method\cite{DBLP:journals/corr/GirshickDDM13} where we use selective search to extract just 2000 regions from the image and he called them region proposals. Therefore, now, instead of trying to classify a huge number of regions, you can just work with 2000 regions. These 2000 region proposals are generated using the selective search algorithm which is written below.
+\begin{enumerate}
+    \item Generate initial sub-segmentation, we generate many candidate regions
+    \item Use greedy algorithm to recursively combine similar regions into larger ones 
+    \item Use the generated regions to produce the final candidate region proposals
+\end{enumerate}
+So far, we have seen how RCNN can be helpful for object detection. But this technique comes with its own limitations. Training an RCNN model is expensive and slow thanks to the below steps:
+\begin{enumerate}
+    \item Extracting 2,000 regions for each image based on selective search
+    \item Extracting features using CNN for every image region. Suppose we have N images, then the number of CNN features will be N*2,000
+    \item The entire process of object detection using RCNN has three models: 
+    \begin{enumerate}
+        \item CNN for feature extraction
+        \item Linear SVM classifier for identifying objects
+        \item Regression model for tightening the bounding boxes.
+    \end{enumerate}
+\end{enumerate}
+
+\subsection{YOLO\cite{yolo}}
+YOLO (You Only Look Once), is a network for object detection. The object detection task consists in determining the location on the image where certain objects are present, as well as classifying those objects. Previous methods for this, like R-CNN and its variations, used a pipeline to perform this task in multiple steps. This can be slow to run and also hard to optimize, because each individual component must be trained separately. YOLO, does it all with a single neural network. A image is passed through a neural network that looks similar to a normal CNN, but you get a vector of bounding boxes and class predictions in the output. The output is shown in figure \ref{fig:yolo output} and described below:
+\begin{itemize}
+    \item center of a bounding box (bx, by)
+    \item width (bw)
+    \item height (bh)
+    \item value c is corresponding to a class of an object (f.e. car, traffic lights,…).
+\end{itemize}
+\begin{figure}[!htb]
+\centering
+\includegraphics[height=2.5in]{pics/yolo_output.png}
+\caption{YOLO Output}
+\label{fig:yolo output}
+\end{figure}
+Firstly, we are splitting our image into cells, typically its $19 \times 19$ grid. Each cell will be responsible for predicting 5 bounding boxes in case there are more than one object in this cell. This will give us 1805 bounding boxes for an image. This is illustrated in figure \ref{fig:yolo_split}.\newline
+\begin{figure}[!htb]
+\centering
+\includegraphics[height=2.5in]{pics/yolo_split.png}
+\caption{YOLO: Split the Image into cells}
+\label{fig:yolo_split}
+\end{figure}
+\noindent Then we have a deep CNN taking in the input image and spit out the output in the dimension of $(19, 19, 5, 5 + 80)$, where 80 is the number of classes. This is illustrated in figure \ref{fig:yolo_split}.\newline
+Majority of those cells and boxes won’t have an object inside and this is the reason why we need to predict $p_c$. In the next step, we’re removing boxes with low object probability and bounding boxes with the highest shared area in the process called non-max suppression, which is shown in figure \ref{fig:yolo_suppression}.\newline
+\begin{figure}[!htb]
+\centering
+\includegraphics[height=2.5in]{pics/yolo_suppression.png}
+\caption{YOLO: Non-max suppression}
+\label{fig:yolo_suppression}
+\end{figure}
+YOLO has several advantages over classifier-based systems. It looks at the whole image at test time so its predictions are informed by global context in the image. It also makes predictions with a single network evaluation unlike systems like R-CNN which require thousands for a single image. This makes it extremely fast, more than 1000x faster than R-CNN and 100x faster than Fast R-CNN.
 \section{Additional Resources}
 \begin{enumerate}
     \item CS231n (CNNs for Visual Recognition) class notes : http://cs231n.github.io/convolutional-networks/
