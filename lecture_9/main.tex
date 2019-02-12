@@ -21,7 +21,6 @@
 \setlength{\parindent}{0 in}
 \setlength{\parskip}{0.1 in}
 
-
 \newcounter{lecnum}
 \renewcommand{\thepage}{\thelecnum-\arabic{page}}
 \renewcommand{\thesection}{\thelecnum.\arabic{section}}
@@ -102,7 +101,7 @@ The figure below shows a simplified diagram of a biological neuron:
 \label{fig:bio-neuron}
 \end{figure}
 
-There are approximately 86 billion neurons in the human nervous system and they are connected with approximately $10^14$ - $10^15$ synapses\cite{cs231n-website}.
+There are approximately 86 billion neurons in the human nervous system and they are connected with approximately $10^{14}$ - $10^{15}$ synapses\cite{cs231n-website}.
 
 The figure below shows a commonly used mathematical model of a neuron:
 
@@ -196,7 +195,7 @@ It saturates in the same way as a sigmoid does but it has the advantage of being
 The Rectified Linear Unit is simply a threshold at zero and has become very popular in the last few years.
 \begin{figure}[!htb]
 \centering
-\includegraphics[height = 1.2in]{pics/tanh.jpeg}
+\includegraphics[height = 1.2in]{pics/relu.jpeg}
 \caption{The ReLU function\cite{cs231n-website}}
 \label{fig:ReLU}
 \end{figure}
@@ -351,12 +350,69 @@ The Fig.\ref{fig:genpool} shows how pooling works generally. A $2\times2$ poolin
 The last few layers of a ConvNet architecture are typically Fully-Connected (FC) Layers. As seen in regular neural networks, FC Layers serve as a linear classifier for classification or regression. Their activations can be computed with a matrix multiplication followed by a bias offset, \textit{i.e.} $f = Wx + b$. See the Neural Network Basics section of the note for more information.
 
 \subsection{Mainstream Model Architectures}
-Empowered with impressive ability of feature extraction and optimization, deep convolutional neural networks has become the cornerstone of data-driven visual recognition techniques nowadays. Since AlexNet's overwhelming success in ILSVRC 2012, a number of milestone model architectures have been proposed. The most common are:
+\begin{figure}[!htb]
+\centering
+\includegraphics[height = 3in]{pics/netsCompared.png}
+\caption{Comparison of performance of different image classification models in the ImageNet Large Scale Visual Recognition Competition (ILSVRC). Values indicate top-5 classification error on test datasets (how often the correct class did not appear in the top 5 outputted classes for new images).}
+\label{fig:comparison}
+\end{figure}
+Empowered with impressive ability of feature extraction and optimization, deep convolutional neural networks has become the cornerstone of data-driven visual recognition techniques nowadays. Since AlexNet's overwhelming success in the ImageNet Large Scale Visual Recognition Competition (ILSVRC) 2012, a number of milestone model architectures have been proposed. Some common ones are described below:
 \begin{itemize}
 \item \textbf{AlexNet}\cite{alexnet}: Developed by Alex Krizhevsky, Ilya Sutskever and Geoff Hinton. The AlexNet significantly outperformed the second runner-up (top 5 error of 16\% compared to runner-up with 26\% error) ILSVRC challenge in 2012. It is the first work that popularized Convolutional Neural Networks in Computer Vision.
+
+AlexNet had a similar structure to a pivotal network proposet by LeCun et al in 1998 for classifying digits\cite{lecun1998gradient}. It invokes convolutional, max pooling, and fully connected layers, also invoking ReLU activations with dropout (Figure \ref{fig:alexnet}).
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[height = 2in]{pics/alexnet.png}
+\caption{AlexNet model architecture}
+\label{fig:alexnet}
+\end{figure}
+
 \item \textbf{VGGNet}\cite{vggnet}: Proposed by Karen Simonyan and Andrew Zisserman. The VGGNet was the runner-up in ILSVRC 2014. Its main contribution was in showing that the depth of the network is a critical component for good performance. Researchers and engineers tend to design deeper rather than shallower models ever since.
-\item \textbf{GoogLeNet}\cite{googlenet}: As its name shows, it is authored by Szegedy \textit{et al.} from Google. GoogLeNet was the ILSVRC 2014 winner with main contribution in developing Inception Module that dramatically reduced the number of parameters in the network.
-\item \textbf{ResNet}\cite{resnet}:  Developed by Kaiming He \textit{et al.} ResNet was the winner of ILSVRC 2015. It features special skip connections and a heavy use of batch normalization, which is now known as Residual Module. ResNets are currently by far state of the art Convolutional Neural Network models and are the default choice for using ConvNets in practice (as of January 2018).
+
+VGGNet (Figure \ref{fig:vgg} is similar to AlexNet, only with more filters and more layers. The weight configuration of the VGGNet is publicly available and can be used in other applications as a feature extractor.
+\begin{figure}[!htb]
+\centering
+\includegraphics[height = 1in]{pics/vggnet.png}
+\caption{VGGNet model architecture}
+\label{fig:vgg}
+\end{figure}
+
+\item \textbf{GoogLeNet}\cite{googlenet}: As its name shows, it is authored by Szegedy \textit{et al.} from Google. GoogLeNet (Figure \ref{fig:googlenet}) was the ILSVRC 2014 winner with main contribution in developing Inception Module that dramatically reduced the number of parameters in the network. The Inception Modules (Figure \ref{fig:inception}) serve to approximate a sparse CNN with a normal dense construction. This greatly reduces the number of parameters required to optimize over (noting that many activations hence parameters will be heavily correlated). These Inception Modules massively reduced computation requirements.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[height = 2.5in]{pics/InceptionModule.png}
+\caption{Single Inception Module}
+\label{fig:inception}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.33]{pics/GoogLeNet.png}
+\caption{GoogLeNet model architecture}
+\label{fig:googlenet}
+\end{figure}
+
+\item \textbf{ResNet}\cite{resnet}:  Developed by Kaiming He \textit{et al.} ResNet was the winner of ILSVRC 2015. When multiple models were ensembled together, ResNet achieved a top-5 error of 3.57\%, which is astounding. ResNet implemented heavy use of batch normalization, and special skip connections now known as Residual Modules (Figure \ref{fig:residual}). CNNs have a big problem of vanishing gradients, that is, as we move farther away from our output/loss end and more towards our data, less and less gradient information gets propagated. Residual modules allay this by appending lower layers with higher ones, so that the gradients can skip operations. 
+
+When multiple models are ensembled together, ResNet achieves a top-5 classification error of 3.57\%, which is astounding (some say this to be better-than-human accuracy). Still, the top-1 (true) classification accuracy for ResNet was roughly 80\% and has been slightly outperformed by later Inception-based models. Analysis of the evolution of these models in terms of their top-1 classification accuracy can be seen in Figure \ref{fig:top1e}.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[height=1.5in]{pics/residual.PNG}
+\caption{Residual Module\cite{resnet}}
+\label{fig:residual}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[height=2.5in]{pics/top1error.png}
+\caption{Top-1 classification accuracy of different model architectures}
+\label{fig:top1e}
+\end{figure}
 \end{itemize}
 
 There also exist more model architectures proposed for specific tasks, such as YOLO\cite{yolo} and Faster R-CNN\cite{faster_rcnn} in the field of object detection and localization.
@@ -364,10 +420,10 @@ There also exist more model architectures proposed for specific tasks, such as Y
 \section{Additional Resources}
 \begin{enumerate}
     \item CS231n (CNNs for Visual Recognition) class notes : http://cs231n.github.io/convolutional-networks/
-    \item Live Demo - Inner Workings of a CNN : http://scs.ryerson.ca/~aharley/vis/conv/
- 2D version : http://scs.ryerson.ca/~aharley/vis/conv/flat.html
+    \item Live Demo - Inner Workings of a CNN : http://scs.ryerson.ca/\~aharley/vis/conv/ \\
+ 2D version : http://scs.ryerson.ca/\~aharley/vis/conv/flat.html
 \item CS230 : https://cs230-stanford.github.io/
-\item Tensorflow documentation : https://www.tensorflow.org/api_docs/python/tf
+\item Tensorflow documentation : https://www.tensorflow.org/api\_docs/python/tf
 \end{enumerate}
 
 
