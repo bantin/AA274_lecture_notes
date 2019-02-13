@@ -65,27 +65,27 @@
 
 
 \section{Introduction}
-This lecture provides an introduction to Neural Networks and proceeds to discuss Convolutional Neural Networks which are especially suited to process images. With the advance of technology the amount of data available for any given task has gone up exponentially  in the last several decades. Methods such as logistic regression perform well when the training data set is large. But their performance plateaus out after a point. Neural networks have gained popularity because with huge amounts of data which is currently available, even small Neural Networks are able to outperform traditional learning algorithms by large margins. 
+This lecture provides an introduction to neural networks and proceeds to discuss Convolutional neural networks, which are especially suited to process images. With the advance of technology the amount of data available for any given task has gone up exponentially  in the last several decades. Methods such as logistic regression perform well when the training data set is large. But their performance plateaus out after a point. Neural networks have gained popularity because with huge amounts of data which is currently available, even small neural networks are able to outperform traditional learning algorithms by large margins. 
 
-Image recognition and image processing has widespread applications in robotics such as  path identification, obstacle avoidance etc. If we were to use a standard Neural Network architecture to process images, we would need to learn parameters of the order of millions. Convolutional Neural Networks have significantly brought down this number by using special convolution layers which exploits the spatial structure of images. 
+Image recognition and image processing has widespread applications in robotics such as  path identification, obstacle avoidance etc. If we were to use a standard neural network architecture to process images, we would need to learn parameters of the order of millions. Convolutional neural networks have significantly brought down this number by using special convolution layers which exploits the spatial structure of images. 
 
 The core learning objectives of this lecture are:
 \begin{enumerate}
-     \item The basics of Neural Networks :
+     \item The basics of neural networks :
      \begin{itemize}
-         \item How Neural Networks mimic the architecture of human brain and how multiple layers of the network work together
+         \item How neural networks mimic the architecture of human brain and how multiple layers of the network work together
          \item How to train a Neural network to do a particular task and where they could go wrong
      \end{itemize}
-     \item Convolutional Neural Networks:
+     \item Convolutional neural networks:
      \begin{itemize}
-         \item This section covers in depth the different elements of a Convolutional Neural Network and some famous architectures commonly used in the industry 
+         \item This section covers in depth the different elements of a Convolutional neural network and some famous architectures commonly used in the industry 
      \end{itemize}
  \end{enumerate}
  
 
 
 \section{Neural Network Basics}
-Work on Artificial Neural Networks, generally known as just 'Neural Networks', has been inspired by the fact that the human brain processes information in a completely different way than computers. Due to this, human brains are much more efficient at certain tasks, such as vision, language processing, etc. than computers. Artificial neural networks aim to mimic this biological model by employing a large number of simple interconnected processing units or 'neurons'.  We may thus offer the following definition of a neural network viewed as an adaptive machine\cite{haykin}:
+Work on Artificial neural networks, generally known as just 'neural networks', has been inspired by the fact that the human brain processes information in a completely different way than computers. Due to this, human brains are much more efficient at certain tasks, such as vision, language processing, etc. than computers. Artificial neural networks aim to mimic this biological model by employing a large number of simple interconnected processing units or 'neurons'.  We may thus offer the following definition of a neural network viewed as an adaptive machine\cite{haykin}:
 
 A neural network is a massively parallel distributed processor made up of simple processing units that has a natural propensity for storing experiential knowledge and making it available for use. It resembles the brain in two respects:\\
 1. Knowledge is acquired by the network from its environment through a learning process.\\
@@ -112,11 +112,11 @@ The figure below shows a commonly used mathematical model of a neuron:
 \label{fig:neuron_model}
 \end{figure}
 
-Signals travel along the axons (e.g. x0) and interact multiplicatively (e.g. w0x0) with the dendrites of the other neuron based on the synaptic strength at that synapse (e.g. w0). The idea is that the synaptic strengths (the weights w) are learnable and control the strength of influence (and its direction: excitatory (positive weight) or inhibitory (negative weight)) of one neuron on another. We can model the firing rate of the neuron with an activation function f, which represents the frequency of the spikes along the axon. Historically, a common choice of activation function was the sigmoid function, but the ReLU function is more commonly used nowadays. This is because the gradient of the sigmoid function becomes small as its value increases which reduces the training speed of the model.
+Signals travel along the axons (e.g. $x_0$) and interact multiplicatively (e.g. $w_{0}x_{0}$) with the dendrites of the other neuron based on the synaptic strength at that synapse (e.g. $w_0$). The idea is that the synaptic strengths (the weights $w$) are learnable and control the strength of influence (and its direction: excitatory (positive weight) or inhibitory (negative weight)) of one neuron on another. We can model the firing rate of the neuron with an activation function $f$, which represents the frequency of the spikes along the axon. Historically, a common choice of activation function was the sigmoid function, but the ReLU function is more commonly used nowadays. This is because the gradient of the sigmoid function becomes small as its value increases which reduces the training speed of the model.
 
 
 \subsection{Single Layer Network / Logistic Regression}
-Inspired by this model of the neuron, a 1 layer neural net can be built which takes in binary inputs and provides binary output by taking a weighted sum and passing it through an activation function (as seen below). The theory is that if these weights are tuned perfectly, then it should be able to classify the inputs correctly.
+Inspired by this model of the neuron, a single-layer neural net can be built which takes in binary inputs and provides binary output by taking a weighted sum and passing it through an activation function (as seen below). The theory is that if these weights are tuned perfectly, then it should be able to classify the inputs correctly.
 
 
 \begin{figure}[!htb]
@@ -486,6 +486,26 @@ Majority of those cells and boxes won’t have an object inside and this is the 
 \label{fig:yolo_suppression}
 \end{figure}
 YOLO has several advantages over classifier-based systems. It looks at the whole image at test time so its predictions are informed by global context in the image. It also makes predictions with a single network evaluation unlike systems like R-CNN which require thousands for a single image. This makes it extremely fast, more than 1000x faster than R-CNN and 100x faster than Fast R-CNN.
+
+\section{Applications of Machine Learning in Industry}
+
+To the reader that is being exposed to machine learning for the first time, it might be helpful to know what types of problems have been solved through the use of machine learning. Understanding the existing problem domain in which machine learning operates may inspire the reader to extend the use of methods to other domains. This section highlights some examples from recent literature.
+
+\begin{itemize}
+\item \textbf{On-board down-selection of data for spacecraft telemetry.}
+One of the challenges faced by space mission designers is the volume of remote data (telemetry) that can be downlinked for examination by a human operator on the ground. Given this relatively hard physical constraint, it is useful to perform data processing on-board the spacecraft and filter the entire dataset to a (predictably) useful set of telemetry packages for downlink. The Intelligence Payload Experiment (IPEX), a CubeSat that operated on Low Earth Orbit from 2013 to 2015, utilized machine learning to accomplish this on-board autonomy task \cite{ipex}. The satellite performed on-board feature extraction and image classification over the Earth images obtained from its camera. The system was trained with a small sample of data from a suborbital flight, and classified orbital images based on its predictions of snow, water, land, haze, or cloud content. The system utilized random forest classifiers (from the TextureCam suite), which advanced previous work through enhanced analysis on spatial neighborhoods and increased regularization due to using multiple ensembles of decisions trees. This is a notable example for the use of machine learning in robotic systems with limited computational resources.
+
+\item \textbf{Unsupervised learning algorithm to estimate scene depth and robot pose from monocular videos.} 
+As studied earlier in this course, the estimation of scene depth is one of the most important outputs of computer vision in the context of autonomous robotics. Furthermore, a designer may be interested in reducing the number or complexity of sensors required to obtain a depth estimation. Zhou et al. \cite{zhou2017unsupervised} provides a framework for using unsupervised learning from a monocular video to predict depth and pose. The implementation utilizes two parallel networks (one for ego-motion modelling and another one for depth modelling), which are coupled during the calculation of the training loss, but can operate independently during test time. Empirical testing of these algorithms has demonstrated results on par, or higher in the case of pose modelling, than similar supervised methods. 
+
+\item \textbf{Reduced dynamic models for early earthquake prediction.}
+While machine learning is typically introduced in the context of computer vision and image feature extraction, it is important to remember that the framework can be used to analyze other kinds of signals. In 2018, a group of researchers at Los Alamos National Lab utilized machine learning to create a model to analyze correlations between two distinct types of geological measurements \cite{rouet2019continuous}. They constructed a machine learning model to explain readily observable data (like GPS displacement rates) as a function of deeper seismic dynamics, which typically require more sensors and time to describe accurately. To train this random forest prediction model, statistical characteristics of the seismic signal dataset were used as features and measured GPS displacement rate data as labels. According to the authors, this model could provide indirect real-time access to fault physics on deeper portions of the the Earth, thus proving useful in early detection of seismic events that could lead to a major earthquake.
+
+\item \textbf{Enhanced catalog classification in the Mars rover image catalog.}
+Mars rovers and orbiters have produced more than 22 million images of Mars over the course of history. Previously, classification of these images on public databases has been limited to a-priori knowledge of image properties (e.g. camera angle, date, time, etc.), from which the user would have to infer the set of classifiers that would produce a set of features (i.e. if an engineer is looking for images of rover wheels to analyze wheel deterioration, select images that had camera targets pointed at wheels). In 2018, Wagstaff et al. \cite{wagstaff2018deep} described the use of machine learning for feature extraction from images in databases. This resulted in expanding the set of feature class samples that would have been otherwise too costly to examine and classify through human means. Of particular interest, this model showed that a convolutional neural network trained with Earth images can be retrained to successfully classify images from Mars. It used transfer learning to adapt the AlexNet image classifier (trained on Earth dataset) via removal of the final fully connected layer, redefinition of output classes, and retraining using Caffe on the Mars image dataset.
+\end{itemize}
+
+
 \section{Additional Resources}
 \begin{enumerate}
     \item CS231n (CNNs for Visual Recognition) class notes : http://cs231n.github.io/convolutional-networks/
@@ -501,6 +521,6 @@ YOLO has several advantages over classifier-based systems. It looks at the whole
 \bibliography{references}
 
 \subsubsection*{Contributors}
-Chi Zhang, Honghao Wei, Matthew Tan, Taylor Howell, Brian Jackson, Saifan Rafiq
+Chi Zhang, Honghao Wei, Matthew Tan, Taylor Howell, Brian Jackson, Saifan Rafiq, Kevin Okseniuk
 
 \end{document}
