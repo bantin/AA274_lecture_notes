@@ -279,9 +279,9 @@ Limit the maximum weight of a neuron.
 % PART III %
 %%%%%%%%%%%%
 \section{Convolutional Neural Networks}
-A simple Convolutional Neural Networks is a sequence of layers, and every layer of a Convolutional Neural Networks transforms one volume of activations to another through a differentiable function. There are four main types of layers to build ConvNet architectures: \textbf{Convolutional Layer}, \textbf{Nonlinearity Layer}, \textbf{Pooling Layer}, and \textbf{Fully-Connected Layer}. These layers are stacked to form a full ConvNet architecture. In this way, Convolutional Neural Networks transform the original image layer by layer from the original pixel values to the final class scores.
+A simple Convolutional Neural Networks is a sequence of layers, where every layer of a Convolutional Neural Networks transforms one volume of activations to another through a differentiable function. There are four main types of layers to build ConvNet architectures: \textbf{Convolutional Layer}, \textbf{Nonlinearity Layer}, \textbf{Pooling Layer}, and \textbf{Fully-Connected Layer}. These layers are stacked to form a full ConvNet architecture. In this way, Convolutional Neural Networks transform the original image layer by layer from the original pixel values to the final class scores.
 
-In this section, we mainly discuss the three types of layer in Convolutional Neural Networks, including Convolutional layer, Pooling layer and Fully-connected layer.
+In this section, we mainly discuss the three types of layer in Convolutional Neural Networks: the Convolutional layers, the Pooling layers and the Fully-connected layers.
 
 \subsection{Convolutional Layer}
 \textbf{Parameter Sharing}
@@ -290,7 +290,7 @@ Parameter sharing scheme is used in Convolutional Layers to control the number o
 \textbf{Convolution Details}
 The convolution operation essentially performs dot products between the filters and local regions of the input. In other words, each element is computed by element-wise multiplying the local regions of the input (blue part in Figure \ref{fig:conv_demo}) with the filter (red part in Figure \ref{fig:conv_demo}), summing it up, and then offsetting the result by the bias. The output is the green part in Figure \ref{fig:conv_demo}.
 
-Noticing we give the demo in 2D format. In real cases, the input would be a 3D tensor while he depth of the output volume is a hyperparameter. It corresponds to the number of filters we would like to use, each learning to look for something different in the input. Take Figure \ref{fig:conv_demo2} as an example, if we have 6 $5\times5$ filters, we will get 6 separate activation maps as output.
+Noticing we give the demo in 2D format. In real cases, the input would be a 3D tensor while the depth of the output volume is a hyperparameter. It corresponds to the number of filters we would like to use, each learning to look for something different in the input. Take Figure \ref{fig:conv_demo2} as an example, if we have 6 $5\times5$ filters, we will get 6 separate activation maps as output.
 
 \textbf{Spatial arrangement} Besides depth, there are two hyperparameters to control the size of the output volume: the stride and zero-padding
 \begin{itemize}
@@ -347,7 +347,16 @@ In practice, it is common to periodically insert a Pooling Layer in-between succ
 The Fig.\ref{fig:genpool} shows how pooling works generally. A $2\times2$ pooling filter with stride 2 is applied on the $224\times224\times64$ input volume, yielding the $112\times112\times64$ output volume. Note that the width and height of the input volume shrinks to half while the depth is preserved. The most common downsampling operation is MAX. The Fig.\ref{fig:maxpool} here shows max pooling with a stride of 2. That is, each max is taken over 4 numbers in a $2\times2$ square. For instance, the top-left red square squashes to a single value, \texttt{\textbf{6}}, which is \texttt{\textbf{max\{1, 1, 5, 6\}}}.
 
 \subsection{Fully-Connected Layer}
-The last few layers of a ConvNet architecture are typically Fully-Connected (FC) Layers. As seen in regular neural networks, FC Layers serve as a linear classifier for classification or regression. Their activations can be computed with a matrix multiplication followed by a bias offset, \textit{i.e.} $f = Wx + b$. See the Neural Network Basics section of the note for more information.
+The last few layers of a ConvNet architecture are typically Fully-Connected (FC) Layers. As seen in regular neural networks, FC Layers serve as a linear classifier for classification or regression. The FC Layers takes the "summary vectors" of the images, which are vectors with only the basic information needed to recreate the image, and feed them into the image classifier to obtain the final classification.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[height = 2in]{pics/Fully-Connected Layer.jpg}
+\caption{Fully-Connected Layer\cite{cs231n-website}}
+\label{fig:fc layer}
+\end{figure}
+
+The activations of the classifier are computed with a matrix multiplication followed by a bias offset, \textit{i.e.} $f = Wx + b$. Where the weights, $W$, of the biases are formed while classifying the known training dataset. The output of the FC Layers is typically a vector representing the probablitities calculated of each classification, with the final classification being the highest calculated probability. See the Neural Network Basics section of the note for more information.
 
 \subsection{Mainstream Model Architectures}
 \begin{figure}[!htb]
