@@ -222,31 +222,35 @@ f(x) = max( 0.1 x, x )
 \end{equation*}
 
 \end{enumerate}
-\subsection{Training Neural Networks}
-We now need a way to teach these neural networks weights to make correct predictions. This is done by running the network on known data points and updating the weights of the neurons based on the correctness of the model in classifying the input. \\
+\section{Training Neural Networks}
+We now need a way to teach these neural networks weights to make correct predictions. This is done by running the network on known data points and updating the weights of the neurons based on the correctness of the model in classifying the input. In order to update the weights, we need to select a \textit{loss function} -- a metric that tells us how well our network is doing. \\
 
-Running this however on each input one at a time can take a long period of time for training. Instead these models are run on a sample batch of data. In particular the steps are the following.\\
+\subsection{Cross Entropy Loss}
+In classification settings, it is common to use the cross-entropy loss.
 
-\begin{figure}[!htb]
-\centering
-\includegraphics[height = 2in]{pics/training_net.png}
-\caption{Training a neural net\cite{}}
-\label{fig:Training a neural net}
-\end{figure}
+\begin{equation}
+	\ell_i = -\sum_{c=1}^M y_{i,c} \log p_{i,c} 
+\end{equation}
+$\ell_i$ is used to denote the loss on the $i$th training example. $M$ is the number of classes, $y_{i,c}$ is an indicator which is 1 if image $i$ belongs to class $c$, and $p_c$ is our predicted probability of image $i$ belong to class $c$. Note that this function is convex with respect to the class probabilities $p_{i,c}$.
 
-\textbf{1. Sample a batch of data.}
-We can use a smaller batch of data at each iteration to train the model to decrease training time.
+In practice, you won't have to compute the cross entropy loss by hand -- packages like Tensorflow and Pytorch have it built in.
 
-\textbf{2. Run the input it through the graph and compute the loss.}
-The loss function provides serves as a quality metric and provides us an idea on the error of our model. That is, how correct it is.
+\subsection{Optimization Methods}
+Neural networks are trained using \emph{Stochastic Gradient Descent} and a family of related algorithms. We denote the weights of our model as $W$ and the input of the model as $X$. The total loss on the dataset is denoted as $\ell= \sum_i \ell_i(X,W)$ where the loss is a function of both the parameters and the data, and $\alpha$ is a parameter called the learning rate, which determines how much we update the weights at each step. The gradient descent update is given by:
 
-\textbf{3. Backpropagate}
-Activation functions are chosen to be differentiable to make this step easier. Backpropagation is done by taking the gradient with respect to the weights of each neuron in each layer.
+\begin{equation}
+	W \leftarrow W - \alpha \frac{1}{N} \sum_{i=1}^{N} \nabla \ell_i(X_i,W)
+\end{equation}
 
-\textbf{4. Update these parameters using SGD (Stochastic Gradient Descent)}
-Update each parameter using the gradient calculated in the previous step
+In the case of \textit{Vanilla Gradient Descent} the gradient $\nabla \ell(X,W)$ is computed by averaging the gradient across each individual training example before updating the weights. In practice, iterating over the whole dataset before making any updates to the weights is slow, and so we use \textit{Stochastic Gradient Descent}, which performs an update of the weights for each training example:
 
-\textbf{5. Repeat many times}
+\begin{equation}
+	W \leftarrow W - \alpha \nabla \ell_i(X_i,W)
+\end{equation}
+
+Yet another variant of this method is called \textit{Mini-Batch Gradient Descent}, in which we sample a small batch of the data, and average the gradient over this subset of the data before updating the weights.
+
+There are several extensions to Gradient Descent which have been shown to converge faster in practice. They all use more or less the same idea: perform a weighted average over the gradient across several iterations. Of these, a method called Adam has become the preferred standard for neural network training. See \cite{cs231n-website} for information about why Adam outperforms Gradient Descent.
 
 \subsection{Overfitting}
 Creating complex models sometimes have the disadvantage of being extremely accurate only on the test data. That is, the model is able to classify its entire training data with high accuracy however is unable to generalize and fails with test / real data.
@@ -263,7 +267,7 @@ http://mlwiki.org/index.php/Overfitting
 
 In the example above the left model was too simple and was unable to classify some of the values correctly. On the other the right model despite perfectly classifying on this training dataset is unlikely to perform as well in real-world situations. The middle offers a good classification.
 
-To combat overfitting, regularizaiton is usually introduced in models. Regularization is a technique that penalizes complex models or prevents them from being made. Some of these techniques include
+To combat overfitting, regularization is usually introduced in models. Regularization is a technique that penalizes complex models or prevents them from being made. Some of these techniques include
 
 \textbf{Dropout}
 Randomly select neurons that will not be activated at each pass during training.
@@ -311,7 +315,7 @@ Therefore, we need to use zero-padding. We add additional zero-paddings in the c
 \end{equation}
 \end{itemize}
 
-In general, setting zero padding to be $P=(F−1)/2$ when the stride is $S=1$ ensures that the input volume and output volume will have the same size spatially. It is very common to use zero-padding in this way.
+In general, setting zero padding to be $P=(F1)/2$ when the stride is $S=1$ ensures that the input volume and output volume will have the same size spatially. It is very common to use zero-padding in this way.
 
 \begin{figure}[!htb]
 \centering
